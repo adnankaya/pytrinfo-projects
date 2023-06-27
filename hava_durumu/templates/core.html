@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pytr.info | Hava Durumu Django Projesi</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- header -->
+    <div class="centered">
+        {% block core_header%}
+        <h3>
+            <a href="/">
+                Gerçek Zamanlı Hava Durumu Uygulaması
+            </a>
+        </h3>
+        {% endblock core_header%}
+    </div>
+    <!-- body -->
+    <div class="centered">
+        {% block core_body%}
+
+        {% endblock core_body%}
+    </div>
+    <!-- footer -->
+    <div class="centered bg-light">
+        {% block core_footer%}
+        <h4>https://pytr.info</h4>
+        {% endblock core_footer%}
+    </div>
+</body>
+</html>
