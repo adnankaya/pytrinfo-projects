@@ -13,7 +13,7 @@ def index(request):
             qset.update(**data_dict)
         else:
             new_weather = Weather.objects.create(**data_dict)
-        return JsonResponse(data_dict)
+        return JsonResponse([data_dict], safe=False)
     # eger all parametresi client tarafindan gonderilmisse butun kayitlari cevap olarak döndür
     all = request.GET.get("all")
     if all:

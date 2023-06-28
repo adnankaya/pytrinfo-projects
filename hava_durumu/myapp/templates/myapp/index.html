@@ -15,8 +15,90 @@
             <!-- api yanıtı ve html elementleri burada olusturulacak -->
         </div>
     </div>
-    
-</div>
 
+</div>
+<script>
+    // HTML elements
+    const weatherContainer = document.getElementById('weather-container');
+    const cityInput = document.getElementById('cityInput');
+    const checkWeatherButton = document.getElementById('checkWeatherButton');
+
+    // Event listener for the button click
+    checkWeatherButton.addEventListener('click', () => {
+        const city = cityInput.value;
+        const queryParams = { city };
+
+        // Call the getApiDataByParameter function with the query parameters
+        getApiDataByParameter(queryParams);
+    });
+
+    function getApiDataByParameter(queryParams = {}) {
+        // Convert query parameters to URL search parameters
+        const urlSearchParams = new URLSearchParams(queryParams);
+        const queryString = urlSearchParams.toString();
+
+        // Fetch data from the API with query parameters
+        fetch(`/?${queryString}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    console.log("getApiDataByParameter -> API response:", data);
+                    createElements(data, weatherContainer);
+                }
+            })
+            .catch(error => {
+                console.error('Error triggering:', error);
+            });
+    }
+    
+    function createElements(data, weatherContainer) {
+        // Clear the weather container
+        weatherContainer.innerHTML = '';
+
+        // Loop over the weather data and create HTML elements
+        data.forEach(weather => {
+
+            const cardContainer = document.createElement('div');
+            cardContainer.classList.add('card-container');
+
+            const materialCard = document.createElement('div');
+            materialCard.classList.add('material-card');
+
+            const weatherIcon = document.createElement('img');
+            weatherIcon.src = `${weather.icon}`;
+            weatherIcon.alt = 'Image';
+
+            const temperature = document.createElement('span');
+            temperature.classList.add('temperature');
+            temperature.textContent = `${weather.temperature}° C`;
+
+            const city = document.createElement('span');
+            city.classList.add('city');
+            city.textContent = weather.city;
+
+            const description = document.createElement('span');
+            description.classList.add('description');
+            description.textContent = weather.description;
+
+            const updatedDate = document.createElement('small');
+            updatedDate.classList.add('updated_date');
+            updatedDate.textContent = weather.updated_date;
+
+            // Append the created elements
+            materialCard.appendChild(weatherIcon);
+            materialCard.appendChild(temperature);
+            materialCard.appendChild(city);
+            materialCard.appendChild(description);
+            materialCard.appendChild(updatedDate);
+
+            cardContainer.appendChild(materialCard);
+            weatherContainer.appendChild(cardContainer);
+
+        });
+    }
+
+    // initial call
+    getApiDataByParameter({"all":true});
+</script>
 
 {% endblock core_body %}
