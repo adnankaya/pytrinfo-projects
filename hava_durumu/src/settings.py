@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # external apps
-    # TODO
+    'daphne',
     # project apps
     'myapp',
     # django default apps
@@ -78,6 +78,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'src.wsgi.application'
+# Daphne icin bunu ekliyoruz
+ASGI_APPLICATION = "src.asgi.application"
 
 
 # Database

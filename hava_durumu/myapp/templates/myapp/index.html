@@ -50,7 +50,7 @@
                 console.error('Error triggering:', error);
             });
     }
-    
+
     function createElements(data, weatherContainer) {
         // Clear the weather container
         weatherContainer.innerHTML = '';
@@ -97,8 +97,40 @@
         });
     }
 
+    // web soket baglantisi olusturmak icin tanimlanan fonksiyon
+    function connectWebSocket() {
+        const WEBSOCKET_PATH = "/weather-websocket-data/"
+        const WEBSOCKET_PROTOCOL_NAME = "ws://"
+        const SERVER_DOMAIN = window.location.host;
+        _socket = new WebSocket(
+            // websocket haberlesme icin URL olusturma. Ör; ws://localhost:8000/my-ws-data/
+            WEBSOCKET_PROTOCOL_NAME + SERVER_DOMAIN + WEBSOCKET_PATH
+        );
+        // backendden veri aliyoruz
+        _socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            // Alinan veriyi isle
+            console.log("alınan data: ", data);
+        };
+
+        _socket.onclose = function (event) {
+            console.error('web socket beklenmedik şekilde kapandı');
+        };
+
+        _socket.onerror = function (error) {
+            console.error('WebSocket error:', error);
+            // hata alma durumunda socket baglantisini kapat ve yeniden baglan
+            _socket.close();
+            setTimeout(connectWebSocket, 2000);
+        };
+    }
+    /*******************************************************/
+    // Connect to the WebSocket
+    /*******************************************************/
+    connectWebSocket();
+
     // initial call
-    getApiDataByParameter({"all":true});
+    getApiDataByParameter({ "all": true });
 </script>
 
 {% endblock core_body %}

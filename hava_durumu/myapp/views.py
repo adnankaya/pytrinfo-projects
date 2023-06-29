@@ -3,6 +3,7 @@ from django.http.response import JsonResponse # yeni
 # internals
 from .utils import request_to_weatherapi # yeni
 from .models import Weather
+from .consumers import active_consumers # yeni
 
 def index(request):
     city = request.GET.get("city")
@@ -30,5 +31,11 @@ def index(request):
             for obj in weathers
         ]
         return JsonResponse(serialized_data, safe=False)
+    # websocket ile haberleşme yapmak için view üzerinden tetikleme yapacagiz
+    triggered = request.GET.get("trigger")
+    if triggered:
+        for consumer in active_consumers:
+            consumer.receive(qset={"data": "pytr.info sitesinden zengin içerikler..."})
+        return JsonResponse({"message":"Tetiklendi!"}, safe=False)
 
     return render(request, "myapp/index.html")
